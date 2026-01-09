@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>ATK SHAHIN</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f1f3f6;
+  color: #333;
+}
+
+/* HEADER */
+header {
+  background: #1f2937;
+  color: #fff;
+  padding: 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  opacity: .8;
+}
+
+/* CONTENT */
+.container {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.section-title {
+  font-size: 20px;
+  margin-bottom: 15px;
+  border-left: 5px solid #2563eb;
+  padding-left: 10px;
+}
+
+/* PRODUCT LIST */
+.product {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.08);
+}
+
+.product img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 15px;
+}
+
+.product h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.product span {
+  display: block;
+  margin-top: 5px;
+  color: #2563eb;
+  font-weight: bold;
+}
+
+/* CHAT BUTTON */
+.chat-toggle {
+  position: fixed;
+  right: 0;
+  top: 40%;
+  background: #2563eb;
+  color: white;
+  padding: 15px 10px;
+  border-radius: 10px 0 0 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* CHAT PANEL */
+.chat-panel {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100%;
+  background: white;
+  box-shadow: -10px 0 30px rgba(0,0,0,.2);
+  display: flex;
+  flex-direction: column;
+  transition: .3s;
+}
+
+.chat-panel.active {
+  right: 0;
+}
+
+.chat-header {
+  background: #2563eb;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background: #f9fafb;
+}
+
+.msg {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  max-width: 85%;
+}
+
+.user {
+  background: #2563eb;
+  color: white;
+  margin-left: auto;
+}
+
+.bot {
+  background: white;
+  border: 1px solid #ddd;
+}
+
+/* INPUT */
+.chat-input {
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+.chat-input input {
+  flex: 1;
+  border: none;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.chat-input button {
+  border: none;
+  background: #2563eb;
+  color: white;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>ATK SHAHIN</h1>
+  <p>Kebutuhan Alat Tulis & Perlengkapan Kantor</p>
+</header>
+
+<div class="container">
+  <div class="section-title">Daftar Produk</div>
+
+  <div class="product">
+    <img src="https://images.unsplash.com/photo-1581092919535-7146b4a1d3d4">
+    <div>
+      <h3>Pulpen, Pensil & Spidol</h3>
+      <span>Mulai Rp2.000</span>
+    </div>
+  </div>
+
+  <div class="product">
+    <img src="https://images.unsplash.com/photo-1606760227091-3dd870d97f1d">
+    <div>
+      <h3>Buku Tulis & Kertas</h3>
+      <span>Mulai Rp5.000</span>
+    </div>
+  </div>
+
+  <div class="product">
+    <img src="https://images.unsplash.com/photo-1588702547919-26089e690ecc">
+    <div>
+      <h3>Map, Ordner & Arsip</h3>
+      <span>Mulai Rp3.000</span>
+    </div>
+  </div>
+
+  <div class="product">
+    <img src="https://images.unsplash.com/photo-1598257006460-7c64a5a3a1b0">
+    <div>
+      <h3>Perlengkapan Kantor</h3>
+      <span>Mulai Rp10.000</span>
+    </div>
+  </div>
+</div>
+
+<div class="chat-toggle" onclick="toggleChat()">CHAT</div>
+
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">Admin ATK SHAHIN</div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg bot">Halo 👋 Silakan tanya harga atau stok ATK.</div>
+  </div>
+  <div class="chat-input">
+    <input id="chatInput" placeholder="Tulis pesan...">
+    <button onclick="sendMessage()">Kirim</button>
+  </div>
+</div>
+
+<script>
+const webhookUrl = "https://n8n-re9macilutpq.kol.sumopod.my.id/webhook/atk-shahin";
+
+function toggleChat() {
+  document.getElementById("chatPanel").classList.toggle("active");
+}
+
+function addMessage(text, type) {
+  const box = document.getElementById("chatMessages");
+  const div = document.createElement("div");
+  div.className = "msg " + type;
+  div.innerText = text;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function sendMessage() {
+  const input = document.getElementById("chatInput");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  addMessage(msg, "user");
+  input.value = "";
+
+  fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  })
+  .then(res => res.text())
+  .then(text => {
+    try {
+      const data = JSON.parse(text);
+      addMessage(data.output || "Admin siap membantu 😊", "bot");
+    } catch {
+      addMessage(text, "bot");
+    }
+  })
+  .catch(() => {
+    addMessage("Admin sedang offline 😥", "bot");
+  });
+}
+</script>
+
+</body>
+</html>
